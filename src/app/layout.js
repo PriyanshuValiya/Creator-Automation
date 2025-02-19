@@ -23,18 +23,19 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
-      <html lang="en" suppressContentEditableWarning>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased px-2`}
-        >
-            {/* <Header /> */}
-            <SignedIn>
-              {/* <UserButton showName /> */}
-            </SignedIn>
-            {children}
+      <html lang="en">
+        <body>
+          <SignedOut  >
+             {/* <SignInButton />*/}  
+          </SignedOut>
+
+          <SignedIn>  
+                {/* <UserButton showName /> */} 
+          </SignedIn>
+          
+          {children}
         </body>
       </html>
     </ClerkProvider>
-  );
+  )
 }
-
