@@ -17,7 +17,11 @@ export default function Dashboard() {
     "Fashion",
   ]);
   const [showManualPost, setShowManualPost] = useState(false);
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState({
+    username: "",
+    email: "",
+    avatar: "",
+  });
 
   // Redirect to home if not signed in
   useEffect(() => {
@@ -30,9 +34,9 @@ export default function Dashboard() {
   useEffect(() => {
     if (user) {
       setUserData({
-        username: user.fullName || "User",
-        email: user.primaryEmailAddress?.emailAddress || "No Email",
-        avatar: user.imageUrl || "/default-avatar.png",
+        username: user?.fullName,
+        email: user.primaryEmailAddress?.emailAddress,
+        avatar: user?.imageUrl,
       });
     }
   }, [user]);

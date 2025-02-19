@@ -2,7 +2,7 @@
 
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation'; // Replaces next/router
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Header from '../components/Header.jsx';
 
 export default function HomePage() {
