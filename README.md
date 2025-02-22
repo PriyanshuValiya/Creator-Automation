@@ -22,8 +22,8 @@ In today's fast-paced digital world, content creators struggle with generating h
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/your-username/ai-content-automation.git
-cd ai-content-automation
+git clone https://github.com/PriyanshuValiya/Creator-Automation.git
+cd Creator-Automation
 ```
 
 ### 2️⃣ Install Dependencies
@@ -34,27 +34,20 @@ npm install
 ### 3️⃣ Set Up Environment Variables
 Create a `.env.local` file in the root directory and add:
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:5000
-MONGO_URI=your_mongodb_connection_string
-NEXTAUTH_SECRET=your_secret_key
-NEXTAUTH_URL=http://localhost:3000
-OPENAI_API_KEY=your_openai_api_key
-INSTAGRAM_ACCESS_TOKEN=your_instagram_access_token
+NEXT_PUBLIC_GEMINI_API_KEY=your_gemin_api_key
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+CLERK_SECRET_KEY=your_secret_key
+NEXT_PUBLIC_IMAGE_KEY=secret_image_api_key
+EMAIL_USER=your_emil_id
+EMAIL_PASS=your_password
 ```
 
 ### 4️⃣ Start the Development Server
-#### Backend (Express.js)
-```bash
-cd backend
-npm install
-node server.js
-```
 #### Frontend (Next.js)
 ```bash
-cd ../frontend
 npm run dev
 ```
-App will be running at `http://localhost:3000`
+App will be running at `http://localhost:5173`
 
 ## 🚀 Future Enhancements
 - Support for multiple social media platforms (LinkedIn, Facebook, TikTok)
