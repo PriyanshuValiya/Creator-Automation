@@ -14,9 +14,9 @@ In today's fast-paced digital world, content creators struggle with generating h
 - **Frontend:** Next.js, Tailwind CSS
 - **Backend:** Node.js, Express.js
 - **Database:** MongoDB
-- **Authentication:** NextAuth.js
-- **AI Services:** Gemini API / OpenAI API
-- **Social Media Integration:** Instagram Graph API, Twitter API
+- **Authentication:** Clerk
+- **AI Services:** Gemini API 
+- **Social Media Integration:** Instagram Graph API
 
 ## 🏗️ How to Run Locally
 
