@@ -10,8 +10,10 @@ import Link from "next/link";
 export default function Dashboard() {
   const { user, isSignedIn } = useUser();
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [customCategory, setCustomCategory] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [categories, setCategories] = useState([
     "Technology",
     "Travel",
@@ -24,6 +26,8 @@ export default function Dashboard() {
     username: "",
     email: "",
     avatar: "",
+    credits: 10, // Corrected field name
+    premium: false,
   });
 
   // Redirect to home if not signed in
@@ -35,16 +39,7 @@ export default function Dashboard() {
     }
   }, [isSignedIn, router]);
 
-  // Set user data when available
-  useEffect(() => {
-    if (user) {
-      setUserData({
-        username: user?.fullName,
-        email: user.primaryEmailAddress?.emailAddress,
-        avatar: user?.imageUrl,
-      });
-    }
-  }, [user]);
+ 
 
   const addCategory = () => {
     if (customCategory.trim() !== "" && !categories.includes(customCategory)) {
@@ -56,7 +51,11 @@ export default function Dashboard() {
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside className={`bg-white shadow-lg p-6 flex flex-col space-y-6 transition-all ${sidebarOpen ? "w-64" : "w-16"}`}>
+      <aside
+        className={`bg-white shadow-lg p-6 flex flex-col space-y-6 transition-all ${
+          sidebarOpen ? "w-64" : "w-16"
+        }`}
+      >
         <button onClick={() => setSidebarOpen(!sidebarOpen)} className="self-end p-2">
           {sidebarOpen ? <X size={24} /> : <Menu size={24} className="-mx-4" />}
         </button>
@@ -65,13 +64,19 @@ export default function Dashboard() {
             <h2 className="text-2xl font-bold text-gray-800">Dashboard</h2>
             <nav className="flex flex-col space-y-3">
               <Link href="/createpost">
-                <button className="p-3 bg-gray-200 rounded-lg text-left hover:bg-gray-300 transition">📝 Create Post</button>
+                <button className="p-3 bg-gray-200 rounded-lg text-left hover:bg-gray-300 transition">
+                  📝 Create Post
+                </button>
               </Link>
               <Link href="/aipost">
-                <button className="p-3 bg-gray-200 rounded-lg text-left hover:bg-gray-300 transition">🤖 AI Post</button>
+                <button className="p-3 bg-gray-200 rounded-lg text-left hover:bg-gray-300 transition">
+                  🤖 AI Post
+                </button>
               </Link>
               <SignOutButton>
-                <button className="p-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">Sign Out</button>
+                <button className="p-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
+                  Sign Out
+                </button>
               </SignOutButton>
             </nav>
           </>
