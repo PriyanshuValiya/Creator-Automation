@@ -1,13 +1,13 @@
 "use client";
 
-import { SignedOut, useUser } from "@clerk/nextjs";
+import { SignedOut } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Header from "../components/Header.jsx";
 import { motion } from "framer-motion";
 
 export default function HomePage() {
-  const { isSignedIn, isLoaded } = useUser();
+  // const { isSignedIn, isLoaded } = useUser();
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
 
@@ -16,13 +16,13 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    if (isLoaded && isSignedIn) {
+    // if (isLoaded && isSignedIn) {
       router.replace("/dashboard");
-    }
-  }, [isSignedIn, isLoaded, router]);
+    //}
+  }, [isLoaded, router]);
 
   // Prevent rendering content until auth state is loaded
-  if (!isClient || !isLoaded || isSignedIn) {
+  if (!isClient || !isLoaded) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-800">
         Hang tight! We're setting things up for you...

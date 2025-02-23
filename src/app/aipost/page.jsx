@@ -13,10 +13,10 @@ import {
 } from "@/components/ui/select";
 import { Download, Send, Copy } from "lucide-react";
 import { toast } from "sonner";
-import { useUser } from "@clerk/nextjs";
+// import { useUser } from "@clerk/nextjs";
 
 export default function AIPost() {
-  const { user } = useUser();
+  // const { user } = useUser();
   const [keyword, setKeyword] = useState("");
   const [theme, setTheme] = useState("color");
   const [size, setSize] = useState("1:1");
@@ -120,7 +120,7 @@ export default function AIPost() {
     }
 
     toast("We will send you mail of this image...");
-    const userEmail = user?.primaryEmailAddress?.emailAddress;
+    const userEmail = "valiyapriyansukumar@gmail.com";
 
     try {
       const response = await fetch("/api/sendmail", {

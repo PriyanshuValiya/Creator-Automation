@@ -3,7 +3,6 @@
 import {
   SignedIn,
   SignedOut,
-  useUser,
   SignOutButton,
   UserButton,
 } from "@clerk/nextjs";
@@ -15,7 +14,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
 export default function Dashboard() {
-  const { user, isSignedIn } = useUser();
+  // const { user, isSignedIn } = useUser();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -23,12 +22,12 @@ export default function Dashboard() {
 
   // Redirect to home if not signed in
   useEffect(() => {
-    if (isSignedIn === false) {
+    // if (isSignedIn === false) {
       router.replace("/");
-    } else if (isSignedIn === true) {
-      setLoading(false);
-    }
-  }, [isSignedIn, router]);
+    // } else if (isSignedIn === true) {
+    //   setLoading(false);
+    // }
+  }, [router]);
 
   if (loading) return null; // Prevent rendering before auth check
 
