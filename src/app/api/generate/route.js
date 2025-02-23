@@ -16,7 +16,7 @@ const generationConfig = {
 
 export async function POST(req) {
   try {
-    const { topic } = await req.json();
+    const { topic , wordlimit } = await req.json();
     if (!topic) {
       return NextResponse.json({ error: "Topic is required" }, { status: 400 });
     }
@@ -27,10 +27,12 @@ export async function POST(req) {
       history: [],
     });
 
+
+
     // Send request to Gemini for a detailed caption & max 5 hashtags
     const prompt = `
-      Generate a highly engaging social media caption for the topic: "${topic}". 
-      The caption should be **short, informative and creative** (at least 20 words).
+      Generate a highly engaging social media caption for the topic: "${topic}" in less than ${wordlimit}. 
+      The caption should be **short, informative and creative, relavant**.
       Also, provide **exactly 5 relevant hashtags** related to the caption for instagram.
       Format the response as:
       "Caption: {Your caption here} \n Hashtags: {tag1 tag2 tag3 tag4 tag5}"

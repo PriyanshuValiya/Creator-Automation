@@ -3,11 +3,14 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Copy } from "lucide-react";
+import { toast } from "sonner";
 
 export default function CreatePost() {
   const [caption, setCaption] = useState("");
   const [hashtags, setHashtags] = useState([]);
   const [topic, setTopic] = useState("");
+  const [wordLimit, setWordLimit] = useState(20); // Default word limit
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState(null);
 
@@ -21,7 +24,7 @@ export default function CreatePost() {
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic }),
+        body: JSON.stringify({ topic, wordLimit }), // Send wordLimit to API
       });
       const data = await response.json();
       setCaption(data.caption || "");
@@ -35,6 +38,11 @@ export default function CreatePost() {
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
+  };
+
+  const handleOnCopy = async () => {
+    await navigator.clipboard.writeText(caption);
+    toast("Caption Copied to Clipboard...");
   };
 
   return (
@@ -52,7 +60,7 @@ export default function CreatePost() {
           <input
             type="text"
             className="border border-gray-300 p-3 w-full rounded-xl focus:ring-2 focus:ring-blue-400 outline-none"
-            placeholder="e.g. fitness, motivation, travel"
+            placeholder="Fitness, Motivation, Travel, Technology"
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
           />
@@ -69,6 +77,20 @@ export default function CreatePost() {
           />
         </div>
 
+        {/* Word Limit Selector */}
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-2">Caption Length</label>
+          <select
+            className="border border-gray-300 p-3 w-full rounded-xl focus:ring-2 focus:ring-blue-400 outline-none"
+            value={wordLimit}
+            onChange={(e) => setWordLimit(Number(e.target.value))}
+          >
+            <option value={5}>Short (10 words)</option>
+            <option value={10}>Medium (20 words)</option>
+            <option value={15}>Long (50 words)</option>
+          </select>
+        </div>
+
         {/* Generate Content Button */}
         <button
           onClick={generateContent}
@@ -80,7 +102,10 @@ export default function CreatePost() {
 
         {/* Caption Output */}
         <div className="mt-6">
-          <label className="block text-gray-700 font-medium mb-2">Generated Caption</label>
+          <label className="flex items-center justify-between text-gray-700 font-medium mb-2">
+            <p>Generated Caption</p> 
+            <Copy className="cursor-pointer" size={15} onClick={handleOnCopy} />
+          </label>
           <div className="border border-gray-300 p-3 w-full rounded-xl min-h-[80px] bg-gray-50">
             {loading ? (
               <>
@@ -89,7 +114,7 @@ export default function CreatePost() {
                 <Skeleton className="h-5 w-80 mb-2 bg-slate-300" />
                 <Skeleton className="h-5 w-72 mb-2 bg-slate-300" />
               </>
-            ) : caption || "Your generated caption will appear here..."}
+            ) : caption || <p className="text-gray-500 font-base font-mono">Your generated caption will appear here...</p>}
           </div>
         </div>
 
@@ -107,12 +132,12 @@ export default function CreatePost() {
               </>
             ) : hashtags.length > 0 ? (
               hashtags.map((tag, index) => (
-                <span key={index} className="text-blue-600 font-semibold bg-white px-2 py-1 rounded-lg shadow-sm">
-                  #{tag}
+                <span key={index} className="border border-black text-sm text-blue-600 font-semibold bg-white px-2 py-1 rounded-xl shadow-sm">
+                  {tag}
                 </span>
               ))
             ) : (
-              <span className="text-gray-500">Generated hashtags will appear here...</span>
+              <span className="text-gray-500 font-mono">Generated hashtags will appear here...</span>
             )}
           </div>
         </div>
