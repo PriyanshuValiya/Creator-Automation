@@ -19,7 +19,7 @@ export default function HomePage() {
     // if (isLoaded && isSignedIn) {
       router.replace("/dashboard");
     //}
-  }, [router]);
+  }, []);
 
   // Prevent rendering content until auth state is loaded
   if (!isClient) {
