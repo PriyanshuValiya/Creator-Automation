@@ -17,7 +17,7 @@ export default function HomePage() {
 
   useEffect(() => {
     // if (isLoaded && isSignedIn) {
-      router.replace("/dashboard");
+      router.replace("/");
     //}
   }, []);
 
