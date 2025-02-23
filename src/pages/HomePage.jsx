@@ -22,7 +22,7 @@ export default function HomePage() {
   }, [isLoaded, router]);
 
   // Prevent rendering content until auth state is loaded
-  if (!isClient || !isLoaded) {
+  if (!isClient) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-800">
         Hang tight! We're setting things up for you...
