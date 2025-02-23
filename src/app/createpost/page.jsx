@@ -10,6 +10,7 @@ export default function CreatePost() {
   const [caption, setCaption] = useState("");
   const [hashtags, setHashtags] = useState([]);
   const [topic, setTopic] = useState("");
+  const [wordLimit, setWordLimit] = useState(20); // New: Added wordLimit state
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState(null);
 
@@ -23,7 +24,7 @@ export default function CreatePost() {
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic }),
+        body: JSON.stringify({ topic, wordLimit }), // Updated: Added wordLimit to the API request
       });
       const data = await response.json();
       setCaption(data.caption || "");
@@ -51,11 +52,15 @@ export default function CreatePost() {
         animate={{ opacity: 1, y: 0 }}
         className="bg-white shadow-2xl rounded-3xl p-8 w-full max-w-lg"
       >
-        <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">✨ AI-Powered Post Creator</h2>
-        
+        <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">
+          ✨ AI-Powered Post Creator
+        </h2>
+
         {/* Topic Input */}
         <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-2">Enter Topic</label>
+          <label className="block text-gray-700 font-medium mb-2">
+            Enter Topic
+          </label>
           <input
             type="text"
             className="border border-gray-300 p-3 w-full rounded-xl focus:ring-2 focus:ring-blue-400 outline-none"
@@ -67,13 +72,31 @@ export default function CreatePost() {
 
         {/* File Upload */}
         <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-2">Upload Image/Video</label>
+          <label className="block text-gray-700 font-medium mb-2">
+            Upload Image/Video
+          </label>
           <input
             type="file"
             accept="image/*,video/*"
             className="border border-gray-300 p-3 w-full rounded-xl focus:ring-2 focus:ring-blue-400 outline-none"
             onChange={handleFileChange}
           />
+        </div>
+
+        {/* New: Word Limit Selector */}
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-2">
+            Caption Length
+          </label>
+          <select
+            className="border border-gray-300 p-3 w-full rounded-xl focus:ring-2 focus:ring-blue-400 outline-none"
+            value={wordLimit}
+            onChange={(e) => setWordLimit(Number(e.target.value))}
+          >
+            <option value={10}>Short (10 words)</option>
+            <option value={20}>Medium (20 words)</option>
+            <option value={50}>Long (50 words)</option>
+          </select>
         </div>
 
         {/* Generate Content Button */}
@@ -87,7 +110,10 @@ export default function CreatePost() {
 
         {/* Caption Output */}
         <div className="mt-6">
-          <label className="flex items-center justify-between text-gray-700 font-medium mb-2"><p>Generated Caption</p> < Copy className="cursor-pointer" size={15} onClick={handleOnCopy} /></label>
+          <label className="flex items-center justify-between text-gray-700 font-medium mb-2">
+            <p>Generated Caption</p>
+            <Copy className="cursor-pointer" size={15} onClick={handleOnCopy} />
+          </label>
           <div className="border border-gray-300 p-3 w-full rounded-xl min-h-[80px] bg-gray-50">
             {loading ? (
               <>
@@ -96,13 +122,21 @@ export default function CreatePost() {
                 <Skeleton className="h-5 w-80 mb-2 bg-slate-300" />
                 <Skeleton className="h-5 w-72 mb-2 bg-slate-300" />
               </>
-            ) : caption || <p className="text-gray-500 font-base font-mono">Your generated caption will appear here...</p>}
+            ) : (
+              caption || (
+                <p className="text-gray-500 font-base font-mono">
+                  Your generated caption will appear here...
+                </p>
+              )
+            )}
           </div>
         </div>
 
         {/* Hashtags Output */}
         <div className="mt-4">
-          <label className="block text-gray-700 font-medium mb-2">Generated Hashtags</label>
+          <label className="block text-gray-700 font-medium mb-2">
+            Generated Hashtags
+          </label>
           <div className="border border-gray-300 p-3 w-full rounded-xl bg-gray-50 min-h-[50px] flex flex-wrap gap-2">
             {loading ? (
               <>
@@ -114,12 +148,17 @@ export default function CreatePost() {
               </>
             ) : hashtags.length > 0 ? (
               hashtags.map((tag, index) => (
-                <span key={index} className="border border-black text-sm text-blue-600 font-semibold bg-white px-2 py-1 rounded-xl shadow-sm">
+                <span
+                  key={index}
+                  className="border border-black text-sm text-blue-600 font-semibold bg-white px-2 py-1 rounded-xl shadow-sm"
+                >
                   {tag}
                 </span>
               ))
             ) : (
-              <span className="text-gray-500 font-mono">Generated hashtags will appear here...</span>
+              <span className="text-gray-500 font-mono">
+                Generated hashtags will appear here...
+              </span>
             )}
           </div>
         </div>

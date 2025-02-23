@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Download, Send } from "lucide-react";
+import { Download, Send, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { useUser } from "@clerk/nextjs";
 
@@ -22,6 +22,10 @@ export default function AIPost() {
   const [size, setSize] = useState("1:1");
   const [loading, setLoading] = useState(false);
   const [generatedImage, setGeneratedImage] = useState("");
+  const [caption, setCaption] = useState("");
+  const [hashtags, setHashtags] = useState([]);
+  const [topic, setTopic] = useState("");
+  const [file, setFile] = useState(null);
 
   const handleTextToImage = async () => {
     setLoading(true);
@@ -143,6 +147,37 @@ export default function AIPost() {
     }
   };
 
+  const generateContent = async () => {
+    if (!topic.trim()) {
+      alert("Please enter a topic for better results.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ topic }),
+      });
+      const data = await response.json();
+      setCaption(data.caption || "");
+      setHashtags(data.hashtags || []);
+    } catch (error) {
+      console.error("Error fetching AI-generated content:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleOnCopy = async () => {
+    await navigator.clipboard.writeText(caption);
+    toast("Caption Copied to Clipboard...");
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f0f4ff] to-[#e0e7ff] p-6">
       <motion.div
@@ -250,6 +285,50 @@ export default function AIPost() {
             </div>
           </motion.div>
         )}
+
+        {/* Caption Output */}
+        <div className="mt-6">
+          <label className="flex items-center justify-between text-gray-700 font-medium mb-2">
+            <p>Generated Caption</p>
+            <Copy className="cursor-pointer" size={15} onClick={handleOnCopy} />
+          </label>
+          <div className="border border-gray-300 p-3 w-full rounded-xl min-h-[80px] bg-gray-50">
+            {loading ? (
+              <>
+                <Skeleton className="h-5 w-96 mb-2 bg-slate-300" />
+                <Skeleton className="h-5 w-80 mb-2 bg-slate-300" />
+                <Skeleton className="h-5 w-80 mb-2 bg-slate-300" />
+                <Skeleton className="h-5 w-72 mb-2 bg-slate-300" />
+              </>
+            ) : caption || (
+              <p className="text-gray-500 font-base font-mono">Your generated caption will appear here...</p>
+            )}
+          </div>
+        </div>
+
+        {/* Hashtags Output */}
+        <div className="mt-4">
+          <label className="block text-gray-700 font-medium mb-2">Generated Hashtags</label>
+          <div className="border border-gray-300 p-3 w-full rounded-xl bg-gray-50 min-h-[50px] flex flex-wrap gap-2">
+            {loading ? (
+              <>
+                <Skeleton className="h-5 w-24 bg-slate-300" />
+                <Skeleton className="h-5 w-28 bg-slate-300" />
+                <Skeleton className="h-5 w-44 bg-slate-300" />
+                <Skeleton className="h-5 w-36 bg-slate-300" />
+                <Skeleton className="h-5 w-28 bg-slate-300" />
+              </>
+            ) : hashtags.length > 0 ? (
+              hashtags.map((tag, index) => (
+                <span key={index} className="border border-black text-sm text-blue-600 font-semibold bg-white px-2 py-1 rounded-xl shadow-sm">
+                  {tag}
+                </span>
+              ))
+            ) : (
+              <span className="text-gray-500 font-mono">Generated hashtags will appear here...</span>
+            )}
+          </div>
+        </div>
       </motion.div>
     </div>
   );
